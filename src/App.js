@@ -1,24 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import {useEffect, useState} from 'react';
+
+// z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D
 
 function App() {
+
+axios({
+  method: 'GET',
+  url: 'https://api.api-ninjas.com/v1/exercises?',
+  headers: { 'X-Api-Key': 'z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D'},
+  })
+.then((response) => {
+  console.log(response);
+}, (error) => {
+  console.log(error);
+});
+
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+
+    </>
   );
 }
 
