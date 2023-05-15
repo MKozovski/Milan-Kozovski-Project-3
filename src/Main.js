@@ -7,18 +7,21 @@ const Main = () => {
     
     const apiUrl = new URL('https://api.api-ninjas.com/v1/exercises?&');
     const [muscle, setMuscle] = useState('');
-    const [difficulty, setDifficulty] = useState('');
     const [type, setType] = useState('');
-    const [randomResult, setRandomResult] = useState(null);
+    const [difficulty, setDifficulty] = useState('');
+    
     const [combinedResults, setCombinedResults] = useState([]);
+    const [randomResults, setRandomResults] = useState([]);
     
     const handleDifficultyChange = (event) => {
         setDifficulty(event.target.value)};
 
     useEffect(() => {
-        let randomResult = combinedResults[Math.floor(Math.random() * combinedResults.length)];
-        setRandomResult(randomResult);
-        console.log(randomResult)
+        if (combinedResults.length > 0) {
+            const randomSelect = Math.floor(Math.random() * combinedResults.length);
+            const newResults = combinedResults[randomSelect];
+            setRandomResults(prevResults => [...prevResults, newResults]);
+        }
     }, [combinedResults]);
 
     const handleSubmit = () => {
@@ -51,6 +54,11 @@ const Main = () => {
                     console.log(error);
                 });
         }
+    };
+
+    const handleClear = () => {
+        setCombinedResults([]);
+        setRandomResults([]);
     };
 
     return (
@@ -123,7 +131,9 @@ const Main = () => {
             Click me
             </button>
 
-            <Results randomResult={randomResult}/>
+            <button onClick={handleClear}>Clear</button>
+
+            <Results randomResults={randomResults}/>
     </>
 )
 }
