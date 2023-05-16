@@ -5,6 +5,8 @@ import myImage from './workout.svg'
 import './App.css';
 import Header from "./Header";
 
+// TO DO: Finish styling, error handling on no show result 
+
 
 const Main = () => {
     
@@ -28,31 +30,32 @@ const Main = () => {
     }, [combinedResults]);
 
     const handleSubmit = () => {
-        const url = `${apiUrl}${muscle}&difficulty=${difficulty}&${type}`;
-        const urlWithOffset = `${apiUrl}offset=1&${muscle}&difficulty=${difficulty}&${type}`;
-
         if (muscle && difficulty && type) {
-            axios({
-                method: 'GET',
-                url: url,
-                headers: { 'X-Api-Key': 'z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D' },
-            })
-                .then((response) => {
-                    let apiResponse = response.data;
+            const url = `${apiUrl}${muscle}&difficulty=${difficulty}&${type}`;
+            const urlWithOffset = `${apiUrl}offset=1&${muscle}&difficulty=${difficulty}&${type}`;
+            const urlWithOffsetTwo = `${apiUrl}offset=2&${muscle}&difficulty=${difficulty}&${type}`;
 
-                    axios({
-                        method: 'GET',
-                        url: urlWithOffset,
-                        headers: { 'X-Api-Key': 'z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D' },
-                    })
-                        .then((response) => {
-                            let apiResponseTwo = response.data;
-                            setCombinedResults([...apiResponse, ...apiResponseTwo]);
-                            console.log(combinedResults)
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
+            const requestOne = axios.get(url, {
+                headers: { 'X-Api-Key': 'z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D' },
+            });
+            const requestTwo = axios.get(urlWithOffset, {
+                headers: { 'X-Api-Key': 'z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D' },
+            });
+            const requestThree = axios.get(urlWithOffsetTwo, {
+                headers: { 'X-Api-Key': 'z0I1OlumYdr0dG6YF/kRIQ==zbWilQS4KRKzSB3D' },
+            });
+
+            Promise.all([requestOne, requestTwo, requestThree])
+                .then((responses) => {
+                    const apiResponse = responses[0].data;
+                    const apiResponseOffset = responses[1].data;
+                    const apiResponseOffsetTwo = responses[2].data;
+                    const combinedResponse = [
+                        ...apiResponse,
+                        ...apiResponseOffset,
+                        ...apiResponseOffsetTwo,
+                    ];
+                    setCombinedResults(combinedResponse);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -102,16 +105,16 @@ const Main = () => {
                     <select name="type" id="Type" onChange={(event) => setType(event.target.value)}>
                         <option value="">Please Choose</option>
                         <option value="type=cardio">Cardio</option>
-                        <option value="type=olympic_weightlifting">Olympic Weightlifting</option>
                         <option value="type=plyometrics">Plyometrics</option>
                         <option value="type=powerlifting">Powerlifting</option>
                         <option value="type=strength">Strength</option>
                         <option value="type=stretching">Stretching</option>
-                        <option value="type=strongman">Strongman</option>
                     </select>
                 <h2>3.</h2>
+
                 {/* difficulty */}
-                    <input
+                <label htmlFor="beginner">Beginner</label>
+                    <input 
                         type="radio"
                         id="beginner"
                         name="difficulty"
@@ -119,8 +122,8 @@ const Main = () => {
                         checked={difficulty === "beginner"}
                         onChange={handleDifficultyChange}
                     />
-                    <label htmlFor="beginner">Beginner</label>
 
+                <label htmlFor="intermediate">Intermediate</label>
                     <input
                         type="radio"
                         id="intermediate"
@@ -129,8 +132,8 @@ const Main = () => {
                         checked={difficulty === "intermediate"}
                         onChange={handleDifficultyChange}
                     />
-                    <label htmlFor="intermediate">Intermediate</label>
 
+                <label htmlFor="expert">Expert</label>
                     <input
                         type="radio"
                         id="expert"
@@ -139,7 +142,6 @@ const Main = () => {
                         checked={difficulty === "expert"}
                         onChange={handleDifficultyChange}
                     />
-                    <label htmlFor="expert">Expert</label>
                     <h2>4.</h2>
                     <button onClick={handleSubmit} disabled={!muscle || !difficulty || !type}>
                     Click for workout!

@@ -1,22 +1,25 @@
-const Results = ({ randomResults }) => {
+import React, { useState, useEffect } from "react";
 
-// explanation
-    const uniqueResults = Array.from(new Set(randomResults.map(result => result.name))).map(name => {
-        return randomResults.find(result => result.name === name);
-    });
+const Results = ({ randomResults }) => {
+    const [notificationShown, setNotificationShown] = useState(false);
+
+    useEffect(() => {
+        if (randomResults.length === 0 && notificationShown) {
+            setNotificationShown(true);
+            alert("No results found. Please try again.");
+        }
+    }, [randomResults]);
 
     return (
         <>
             <h2>5.</h2>
-            {uniqueResults.map((result) => (
-                <div className="result">
-                    <div key={result.name}>
-                        <h2>{result.name}</h2>
-                        <h3>{result.muscle}</h3>
-                        <h3>{result.type}</h3>
-                        <h3>{result.difficulty}</h3>
-                        <p>{result.instructions}</p>
-                    </div>
+            {randomResults.map((result) => (
+                <div className="result" key={result.name}>
+                    <h2>{result.name}</h2>
+                    <h3>{result.muscle}</h3>
+                    <h3>{result.type}</h3>
+                    <h3>{result.difficulty}</h3>
+                    <p>{result.instructions}</p>
                 </div>
             ))}
         </>
