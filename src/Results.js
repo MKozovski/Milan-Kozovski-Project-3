@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const Results = ({ randomResults }) => {
-    const [notificationShown, setNotificationShown] = useState(false);
-
-    useEffect(() => {
-        if (randomResults.length === 0 && notificationShown) {
-            setNotificationShown(true);
-            alert("No results found. Please try again.");
-        }
-    }, [randomResults]);
 
     return (
         <>
