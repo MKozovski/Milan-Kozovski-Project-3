@@ -58,7 +58,7 @@ const Main = () => {
                     setCombinedResults(combinedResponse);
                 })
                 .catch((error) => {
-                    console.log(error);
+
                 });
         }
     };
