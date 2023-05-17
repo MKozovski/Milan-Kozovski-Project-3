@@ -5,7 +5,7 @@ import myImage from './workout.svg'
 import './App.css';
 import Header from "./Header";
 
-// TO DO: Finish styling, error handling on no show result 
+// This API is hot garbage, for the record 
 
 
 const Main = () => {
